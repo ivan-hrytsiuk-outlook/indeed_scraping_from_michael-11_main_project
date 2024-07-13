@@ -11,33 +11,27 @@ df.rename(columns={'externalApplyLink': 'Apply URL', 'location': 'Office locatio
 
 # Remove all rows that has empty blanks
 df = df.dropna(subset=['Company URL', 'Company logo', 'Apply URL', 'salary'], how='any')
-print(df)
 # %%
 import re
 from datetime import datetime
 def extract_salary_data(salary_string):
     # Define regex patterns for different salary schedules
     patterns = {
-        'yearly': [
+        'Yearly': [
             r'\$([\d,.]+) - \$([\d,.]+) a year',
             r'Up to \$([\d,.]+) a year',
             r'\$([\d,.]+) a year',
         ],
-        'monthly': [
+        'Monthly': [
             r'\$([\d,.]+) - \$([\d,.]+) a month',
             r'Up to \$([\d,.]+) a month',
             r'\$([\d,.]+) a month',
         ],
-        'hourly': [
+        'Hourly': [
             r'\$([\d,.]+) - \$([\d,.]+) an hour',
             r'Up to \$([\d,.]+) an hour',
             r'\$([\d,.]+) an hour',
         ],
-        'daily': [
-            r'\$([\d,.]+) - \$([\d,.]+) a day',
-            r'Up to \$([\d,.]+) a day',
-            r'\$([\d,.]+) a day',
-        ]
     }
 
     for schedule, patterns_list in patterns.items():
@@ -71,28 +65,24 @@ for x in df.index:
 # Add a new column with fixed data
 df['Salary currency'] = 'USD'
 # df['Sticky'] = 'TRUE'
-# df['Apply email'] = None
-# df['Location limits'] = None
+df['Apply email'] = None
+df['Location limits'] = 'United States'
 # df['Highlighted'] = 'FALSE'
-# df['Post state'] = 'draft'
-# df['Post length'] = None
-# df['Job location'] = None
+df['Post state'] = 'draft'
+df['Post length'] = 45
+df['Job location'] = 'onsite'
 
 # Remove columns
 # df.drop(columns=['isExpired', 'jobType'], inplace=True)
 
 # Filter and order columns
-df = df[["Salary currency","Apply URL","Office location","Company name",
-        "Salary min",
-        "Description", "Job type","Date posted",
-        "Salary maximum",
-        "Job title","Company logo",
-        "Salary schedule",
-        "Company URL"]]
+df = df[["Salary currency", "Apply URL", "Office location", "Apply email", "Company name", "Location limits",
+        "Salary min", "Description", "Job type", "Post state", "Date posted", "Post length", "Salary maximum",
+         "Job location", "Job title", "Company logo", "Salary schedule", "Company URL"]]
 
 
 # Save the modified DataFrame to a new Excel file
 output_file_path = 'police officer lateral_modified.csv'
 df.to_csv(output_file_path, index=False)
 
-print("Columns renamed and new column added successfully.")
+print("Converted successfully.")
