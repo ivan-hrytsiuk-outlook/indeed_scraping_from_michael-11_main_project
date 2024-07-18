@@ -1,9 +1,9 @@
 # %% 1. Constants
 apiKey = "apify_api_a46mgbdUMWrHuZjmycf4xdH6Yyvi4H1v4GpA"
 keywordsInfo = [
-    {"position": "police officer lateral", "datasetId": "NpGqlIv2EeCHg0yiA"},  # KBTeiDsOxsrgNqHCt, C2TuLsBaxOfngY7Mj
-    {"position": "police officer basic", "datasetId": "mrtHKK5vUpb8C49FZ"},  # EnfyAq6CXSdyj3NP2
-    {"position": "sheriffs deputy", "datasetId": "p3AL7UGssS7z9IrqG"},  # kJ067cxgFfbkwIfAm
+    {"position": "police officer lateral", "datasetId": "NpGqlIv2EeCHg0yiA"},
+    {"position": "police officer basic", "datasetId": "mrtHKK5vUpb8C49FZ"},
+    {"position": "sheriffs deputy", "datasetId": "p3AL7UGssS7z9IrqG"},
     {"position": "police recruit", "datasetId": "jYwM1hIUZFKUt1Boe"},
     {"position": "police officer recruit", "datasetId": "4ZZt3UiikgqJ0EUux"},
     {"position": "sheriff", "datasetId": "YH4chT8K3yoF8Mo5A"},
@@ -14,8 +14,9 @@ keywordsInfo = [
     {"position": "police officer", "datasetId": "1BZQ04ufy33ivhh1q"},
     {"position": "patrol officer", "datasetId": "7SGgDg2fjLdtIawMw"},
 ]
+print("1. Completed")
 
-# %% 1 => 2. Functions
+# %% 2. Functions (From 1)
 import threading
 
 threadLock = threading.Lock()
@@ -196,8 +197,10 @@ def convertData(infoIndex):
     threadLock.release()
 
 
+print("2. Completed")
+
 if __name__ == '__main__':
-    # %% 2 => 3-1. Scrap(Or export, convert) data using multi-threads
+    # %% 3-1. Scrap(Or export, convert) data using multi-threads (From 2)
     threads = []
     for index in range(0, len(keywordsInfo)):  # len(keywordsInfo)
         # threads.append(threading.Thread(target=scrapData, args=(index,)))
@@ -207,8 +210,8 @@ if __name__ == '__main__':
         thread.start()
     for thread in threads:
         thread.join()
-
-    # %% 3-1 => 3-2. Merge all modified data to one file
+    print('3-1. completed')
+    # %% 3-2. Merge all modified data to one file (From 3-1)
     import pandas as pd
 
     dfArray = []
@@ -216,4 +219,4 @@ if __name__ == '__main__':
         dfArray.append(pd.read_csv(getFileNameOfModified(index)))
     df = pd.concat(dfArray)
     df.to_csv('all-in-one.csv', index=False)
-    print('completed')
+    print('3-2. completed')
